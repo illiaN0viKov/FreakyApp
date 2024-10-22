@@ -15,10 +15,18 @@ Users can search for or discover other users who are attending the same event or
 Possibly add an option to view users with similar event interests or location-based connections.
 6. Create Own Events
 Users can host their own events and invite others, either publicly or privately.
-Event creation includes details like time, location, event capacity, etc.
+Event creation includes details like time, location, event capacity, etc. (privately or publicly).
+
 Some additional ideas to consider:
 Event Recommendations based on user interests, past attendance, or friend activities.
 Integration with Social Media for easy sharing and invites.
 Ratings & Reviews for events or hosts.
 Ticketing Integration for events that require tickets.
 Safety Features like verified profiles, user reviews, or reporting mechanisms.
+
+
+Tech Stack to Use to Use:
+Django (Backend)
+JS, HTML/CSS, React, typescript etc.; any tool possible. (Frontend)
+Any Data Base
+Any Deployment Strategy
