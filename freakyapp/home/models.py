@@ -1,8 +1,9 @@
 from django.db import models
+from django.db.models.signals import post_save
 #from django.contrib.auth.models import AbstractUser - here need to specifi authorization in home settings of user will do it later
 
-
 from django.contrib.auth.models import User
+
 
 #creating user model
 #Integrate user model
@@ -49,3 +50,18 @@ class Message(models.Model):
     content = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+
+    def __str__(self) :
+          return f"{self.user.username} Profile"
+
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        user_profile = Profile(user=instance) 
+        user_profile.save()
+    post_save.connect(create_profile, sender=User)
