@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.urls import reverse
 from .forms import EventForm
+
 
 #for home page
 def home(request):
@@ -23,11 +25,16 @@ def create_event(request):
             event = form.save(commit=False) 
             event.host = request.user  
             event.save()  
-            return redirect('home')
+            messages.success(request, "Event created successfully!")
+            return redirect('event-created')
     else:
         form = EventForm()
-
     return render(request, 'home/create_event.html', {'form': form})
+
+def event_created(request):
+    if not messages.get_messages(request):
+        return redirect('home')
+    return render(request, 'home/event_success_page.html')
 
 
 @login_required(login_url='login')

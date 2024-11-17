@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h3>Host: {{ request.user.username }}</h3>
+<p>Host: {{ request.user.username }}</p>
 <div class="input_event">
     <form method="POST" action=".">
         {% csrf_token %}
