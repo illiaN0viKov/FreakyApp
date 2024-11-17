@@ -22,20 +22,21 @@ class User(AbstractUser):
 
 #creating a room model
 class Event(models.Model):
-    host=models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    host=models.ForeignKey(User, on_delete=models.CASCADE)
     
-
     #think about how to create a topic model
     #topic=models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
-
 
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateTimeField()
-    usersJoined=models.ManyToManyField(User, related_name='participants', blank=True) #creating many to mane field connection
-    updated=models.DateTimeField(auto_now=True)#(take a time step itself)
-             #take a snapshot of any time  model item  was update
-    created=models.DateTimeField(auto_now_add=True)#takes a snapshot when firt time create a room
+    usersJoined=models.ManyToManyField(User, related_name='participants', blank=True) 
+    updated=models.DateTimeField(auto_now=True)
+    created=models.DateTimeField(auto_now_add=True)
+    maxPeople=models.IntegerField()
+     
+    def __str__(self):
+        return f"{self.title} - Event"
 
 #Chat model
 class Chat(models.Model):

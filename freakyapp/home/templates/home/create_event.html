@@ -1,9 +1,12 @@
 {% extends "main.html" %}
 
-
 {% block content %}
-
-<h1>Event page</h1>
-
-
-{%endblock content%}
+<h3>Host: {{ request.user.username }}</h3>
+<div class="input_event">
+    <form method="POST" action=".">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="send_button">Create Event</button>
+    </form>
+</div>
+{% endblock content %}
