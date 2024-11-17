@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 from .forms import EventForm
-
+from django.contrib.auth.forms import UserCreationForm
+ 
 
 #for home page
 def home(request):
@@ -57,4 +58,13 @@ def success_logout(request):
     if request.user.is_authenticated:
         return redirect('home')  # Or any page you prefer
     return render(request, 'home/log_out.html')
+
+def registration(requset):
+    if requset.method == "POST":
+        form = UserCreationForm(requset.POST)
+        if form.is_valid():
+            form.save()
+        
+    return render(request, 'home/regist.html', {'form':form})
+
 

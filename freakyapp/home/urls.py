@@ -12,6 +12,7 @@ urlpatterns = [
     path("success-logout/", views.success_logout, name="success-logout"),
     path("create-event/", views.create_event, name="create-event"),
     path("created-event/", views.event_created, name="event-created"),
+    path("registration/", views.registration, name="registration"),
     
 
     #for future path of event page
