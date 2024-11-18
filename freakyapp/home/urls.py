@@ -7,6 +7,7 @@ urlpatterns = [
     path("", views.home, name= "home"),
     path("events/", views.events, name="events"),
     path("profile/", views.profile, name="profile"),
+    path("myEvents/", views.myEvents, name="myEvents"),
     path("login/", views.CustomLogInView.as_view(), name="login"),
     path("logout/", views.CustomLogOutView.as_view(), name="logout"),
     path("success-logout/", views.success_logout, name="success-logout"),
@@ -14,7 +15,4 @@ urlpatterns = [
     path("created-event/", views.event_created, name="event-created"),
     path("registration/", views.registration, name="registration"),
     
-
-    #for future path of event page
-    #path("event/<str:pk>", views.event, name="event")
 ]

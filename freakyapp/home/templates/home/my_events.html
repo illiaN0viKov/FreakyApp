@@ -2,10 +2,10 @@
 
 {% block content %}
 
-<h1 class="page-title">Events Page</h1>
+<h2>My Events</h2>
 
 <div class="events-container">
-    {% for event in events %}
+    {% for event in myevents %}
     <div class="card">
         <div class="card-header">
             <h2 class="card-title">{{ field_titles.title }}: {{ event.title }}</h2>
@@ -15,6 +15,11 @@
             <p><strong>{{ field_titles.description }}:</strong> {{ event.description }}</p>
             <p><strong>{{ field_titles.date }}:</strong> {{ event.date|date:"d-m-Y" }}</p>
             <p><strong>{{ field_titles.maxPeople }}:</strong> {{ event.maxPeople }}</p>
+
+            <!-- Added a class for styling the button -->
+            <a href="">
+                <button class="edit-button">Edit Event</button>
+            </a>
         </div>
     </div>
     {% empty %}

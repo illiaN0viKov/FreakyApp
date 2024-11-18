@@ -91,3 +91,17 @@ def registration(request):
     return render(request, 'home/regist.html', {'form': form})
 
 
+#open only when you already logIn
+def myEvents(request):
+    myevents = Event.objects.filter(host=request.user)
+    field_titles = {
+        'host': Event._meta.get_field('host').verbose_name,
+        'title': Event._meta.get_field('title').verbose_name,
+        'description': Event._meta.get_field('description').verbose_name,
+        'date': Event._meta.get_field('date').verbose_name,
+        'maxPeople': Event._meta.get_field('maxPeople').verbose_name,
+    }
+    context={'myevents':myevents,
+             'field_titles':field_titles}
+    return render(request, 'home/my_events.html', context)
+
