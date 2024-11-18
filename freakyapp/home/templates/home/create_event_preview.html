@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h2>Preview Event</h2>
+<p><strong>Title:</strong> {{ event.title }}</p>
+<p><strong>Description:</strong> {{ event.description }}</p>
+<p><strong>Date:</strong> {{ event.date }}</p>
+<p><strong>Topics:</strong></p>
+<ul>
+    {% for topic in event.topics.all %}
+        <li>{{ topic.name }}</li>
+    {% endfor %}
+</ul>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Finalize and Create Event</button>
+</form>
+{% endblock content %}

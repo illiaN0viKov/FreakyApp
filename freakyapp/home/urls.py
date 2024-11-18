@@ -11,7 +11,9 @@ urlpatterns = [
     path("logout/", views.CustomLogOutView.as_view(), name="logout"),
     path("success-logout/", views.success_logout, name="success-logout"),
     path("create-event/", views.create_event, name="create-event"),
+    path("create-event-topic/", views.create_event_topic, name="create-event-topic"),
     path("created-event/", views.event_created, name="event-created"),
+    path('create-event/preview/', views.create_event_preview, name='create-event-preview'),
     path("registration/", views.registration, name="registration"),
     
 
