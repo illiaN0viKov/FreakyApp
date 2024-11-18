@@ -127,3 +127,4 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGOUT_REDIRECT_URL = '/success-logout/'
+LOGIN_REDIRECT_URL = '/profile/'  # Replace with the URL you want to redirect to
