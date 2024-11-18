@@ -1,81 +1,5 @@
 {%load static%}
   <!--Think how to change navbar-->
-  <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4; /* Light Theme */
-    }
-
-    /* Navbar Container */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #ffffff; /* Light Background */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Logo Section */
-    .navbar .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #333;
-    }
-
-    /* Links Section */
-    .navbar .nav-links {
-      display: flex;
-      gap: 20px;
-    }
-
-    .navbar .nav-links a {
-      text-decoration: none;
-      font-size: 1rem;
-      color: #555;
-      transition: color 0.3s ease;
-    }
-
-    .navbar .nav-links a:hover {
-      color: #0073e6; /* Blue hover effect */
-    }
-
-    /* Button Section */
-    .navbar .cta {
-      padding: 10px 20px;
-      background-color: #0073e6;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .navbar .cta:hover {
-      background-color: #005bb5;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .navbar .nav-links {
-        display: none; /* Hide links on smaller screens */
-      }
-
-      .navbar .menu-icon {
-        display: block;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -90,7 +14,7 @@
     <div class="nav-links">
       <a href="{% url  'home' %}">Home</a>
       <a href="{% url  'create-event' %}">Create an Event</a>
-      <a href="{% url  'home' %}">Events</a>
+      <a href="{% url  'events' %}">Events</a>
       <a href="{% url  'home' %}">Calendar</a>
       
     </div>

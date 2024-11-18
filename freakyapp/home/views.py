@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.urls import reverse
 from .forms import EventForm
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
+from .models import Event
  
 
 #for home page
@@ -12,8 +14,18 @@ def home(request):
      return render(request, 'home/home.html')
 
 #for event page
-def event(request):
-     return render(request, 'home/event_page.html')
+def events(request):
+    q=request.GET.get('q') if request.GET.get('q') != None else ''
+    events=Event.objects.all()
+    field_titles = {
+        'host': Event._meta.get_field('host').verbose_name,
+        'title': Event._meta.get_field('title').verbose_name,
+        'description': Event._meta.get_field('description').verbose_name,
+        'date': Event._meta.get_field('date').verbose_name,
+        'maxPeople': Event._meta.get_field('maxPeople').verbose_name,
+    }
+    context = {'events': events, 'field_titles': field_titles}
+    return render(request, 'home/event_page.html', context)
 
 
 #creating event page

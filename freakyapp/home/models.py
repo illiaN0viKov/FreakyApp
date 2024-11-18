@@ -8,32 +8,21 @@ from django.contrib.auth.models import User
 
 #creating user model
 #Integrate user model
-'''
-class User(AbstractUser):
-    name=models.CharField(max_length=200, null=True)
-    email=models.EmailField( unique=True, null=True)
-    bio=models.TextField(null=True)
-
-    avatar=models.ImageField(null=True, default="avatar.svg")
-
-    USERNAME_FIELD='email'
-    REQUIRED_FIELDS=[]
-'''
 
 #creating a room model
 class Event(models.Model):
-    host=models.ForeignKey(User, on_delete=models.CASCADE)
+    host=models.ForeignKey(User, on_delete=models.CASCADE,verbose_name="Event Host")
     
     #think about how to create a topic model
     #topic=models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
 
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateTimeField()
+    title = models.CharField(max_length=255,verbose_name="Event Title")
+    description = models.TextField(verbose_name="Event Description")
+    date = models.DateTimeField(verbose_name="Event Date")
     usersJoined=models.ManyToManyField(User, related_name='participants', blank=True) 
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
-    maxPeople=models.IntegerField()
+    maxPeople=models.IntegerField(verbose_name="Maximum People")
      
     def __str__(self):
         return f"{self.title} - Event"

@@ -3,6 +3,23 @@
 
 {% block content %}
 
-<h1>Event page</h1>
+<h1>Events page</h1>
+
+
+<div class="post">
+    {%for event in events %}
+    <div class="card">
+        <h2>{{ field_titles.host }}: {{ event.host }}</h2>
+        <h2>{{ field_titles.title }}: {{ event.title }}</h2>
+        <h2>{{ field_titles.description }}: {{ event.description }}</h2>
+        <h2>{{ field_titles.date }}: {{ event.date }}</h2>
+        <h2>{{ field_titles.maxPeople }}: {{ event.maxPeople }}</h2>
+    </div>
+    {% empty %}
+    <p>No events found.</p>
+
+    {%endfor%}
+  </div>
+
 
 {%endblock content%}
