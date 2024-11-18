@@ -71,12 +71,23 @@ def success_logout(request):
         return redirect('home')  # Or any page you prefer
     return render(request, 'home/log_out.html')
 
-def registration(requset):
-    if requset.method == "POST":
-        form = UserCreationForm(requset.POST)
+def registration(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
         
-    return render(request, 'home/regist.html', {'form':form})
+
+def registration(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page after saving
+            return redirect('login')  # Adjust 'login' to match your URL name for the login page
+    else:
+        form = UserCreationForm()  # Initialize an empty form for GET requests
+
+    return render(request, 'home/regist.html', {'form': form})
 
 
