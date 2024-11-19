@@ -6,7 +6,7 @@ from django.urls import reverse
 from .forms import EventForm, TopicForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
-from .models import Event
+from .models import Event, Topic
 from datetime import datetime
  
 
@@ -47,40 +47,48 @@ def create_event(request):
 @login_required(login_url='login')
 def create_event_topic(request):
     if 'event_data' not in request.session:
-        return redirect('create-event')  # Redirect if event data is missing in the session
+        return redirect('create-event') 
 
     event_data = request.session.get('event_data')
-    event_data['date'] = datetime.fromisoformat(event_data['date'])
+    # event_data['date'] = datetime.fromisoformat(event_data['date'])
 
     if request.method == "POST":
         form = TopicForm(request.POST)
         if form.is_valid():
-            # Create the Event instance and save selected topics (check for another way)
-            event = Event(
-                host=request.user,
-                title=event_data['title'],
-                description=event_data['description'],
-                date=event_data['date'],
-                maxPeople=event_data['maxPeople']
-            )
-            event.save()
-            event.topics.set(form.cleaned_data['topics'])  # Assign selected topics
-            return redirect('create-event-preview')  # Redirect to the preview page
+            event_data['topics'] = list(form.cleaned_data['topics'].values_list('id', flat=True))
+            request.session['event_data'] = event_data 
+            return redirect('create-event-preview')  # Redirect to preview page
     else:
         form = TopicForm()
 
     return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
 
+
 #(work here)
 @login_required(login_url='login')
 def create_event_preview(request):
-    event_id = request.session.get('event_id')
-    event = get_object_or_404(Event, id=event_id, host=request.user)
+    event_data = request.session.get('event_data')
+    if not event_data:
+        return redirect('create-event')
+    
+    event_data['date'] = datetime.fromisoformat(event_data['date'])
+    topics = Topic.objects.filter(id__in=event_data.get('topics', []))
 
     if request.method == "POST":
-        del request.session['event_id']  
-        return redirect('event-created')  
-    return render(request, 'home/create_event_preview.html', {'event': event})
+
+        event = Event.objects.create(
+            host=request.user,
+            title=event_data['title'],
+            description=event_data['description'],
+            date=event_data['date'],
+            maxPeople=event_data['maxPeople'],
+        )
+        event.topics.set(topics)
+        request.session.pop('event_data', None)
+        messages.success(request, f"Event '{event.title}' created successfully!")
+        return redirect('event-created')
+    
+    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics})
 
 
 def event_created(request):
