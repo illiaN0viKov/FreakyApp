@@ -16,6 +16,12 @@
       <a href="{% url  'create-event' %}">Create an Event</a>
       <a href="{% url  'events' %}">Events</a>
       <a href="{% url  'home' %}">Calendar</a>
+
+      {% if user.is_authenticated %}
+        <a href="{% url 'myEvents' %}">My Events</a>
+      {% endif %}
+
+
       
     </div>
     

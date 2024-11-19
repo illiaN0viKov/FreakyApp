@@ -1,73 +1,192 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Light Theme */
-  }
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #555;
+}
 
-  /* Navbar Container */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #ffffff; /* Light Background */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.page-title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 2.3em; /* Reduced font size */
+  color: #333;
+  font-weight: bold;
+}
 
-  /* Logo Section */
-  .navbar .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-  }
+.events-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px; /* Reduced gap between cards */
+  padding: 20px;
+}
 
-  /* Links Section */
+.card {
+  background-color: #fff;
+  border-radius: 8px; /* Slightly smaller radius */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  width: 250px; /* Reduced width */
+  padding: 15px; /* Reduced padding */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 20px; /* Reduced bottom margin */
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background-color: #007BFF;
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4em; /* Reduced font size */
+}
+
+.card-body {
+  padding: 10px 0;
+  color: #444;
+  font-size: 1em; /* Slightly smaller font size */
+}
+
+.card-body p {
+  margin: 8px 0; /* Reduced margin */
+}
+
+.card-body p strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* No events message */
+.no-events {
+  text-align: center;
+  font-size: 1.1em;
+  color: #999;
+  margin-top: 20px;
+}
+
+/* Navbar Container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar .logo {
+  font-size: 1.4rem; /* Slightly smaller logo size */
+  font-weight: bold;
+  color: #333;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar .nav-links a {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+  color: #0073e6;
+}
+
+.navbar .cta {
+  padding: 8px 20px; /* Reduced button padding */
+  background-color: #0073e6;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .cta:hover {
+  background-color: #005bb5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .navbar .nav-links {
-    display: flex;
-    gap: 20px;
+      display: none;
   }
 
-  .navbar .nav-links a {
-    text-decoration: none;
-    font-size: 1rem;
-    color: #555;
-    transition: color 0.3s ease;
-  }
-
-  .navbar .nav-links a:hover {
-    color: #0073e6; /* Blue hover effect */
-  }
-
-  /* Button Section */
-  .navbar .cta {
-    padding: 10px 20px;
-    background-color: #0073e6;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .navbar .cta:hover {
-    background-color: #005bb5;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .navbar .nav-links {
-      display: none; /* Hide links on smaller screens */
-    }
-
-    .navbar .menu-icon {
+  .navbar .menu-icon {
       display: block;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       cursor: pointer;
-    }
   }
+
+  .events-container {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .card {
+      width: 90%; /* Responsive width */
+      max-width: 280px; /* Max width for small screens */
+      margin-bottom: 15px;
+  }
+}
+
+/* Edit Button Style */
+.edit-button {
+  background-color: #0073e6; /* Primary blue background */
+  color: white; /* White text color */
+  font-size: 1.1rem; /* Slightly larger font size */
+  font-weight: bold; /* Bold text */
+  padding: 12px 24px; /* Padding inside the button */
+  border: none; /* No border */
+  border-radius: 6px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  text-align: center; /* Center the text */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  display: inline-block; /* Ensure it acts as a button */
+}
+
+/* Hover state */
+.edit-button:hover {
+  background-color: #005bb5; /* Darker blue when hovered */
+  transform: translateY(-4px); /* Slight lift effect */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* Active (clicked) state */
+.edit-button:active {
+  background-color: #003d80; /* Even darker blue on click */
+  transform: translateY(0); /* Button returns to normal position */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow when clicked */
+}
+
+/* Focus state for accessibility */
+.edit-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 4px rgba(0, 120, 230, 0.5); /* Blue glow when focused */
+}
+
