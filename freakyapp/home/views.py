@@ -96,7 +96,7 @@ def event_created(request):
         return redirect('home')
     return render(request, 'home/event_success_page.html')
 
-
+  
 ##################################################################################
 
 
