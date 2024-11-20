@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .forms import EventForm
+from .forms import EventForm, TopicForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from .models import Event
@@ -13,6 +13,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
+from .models import Event, Topic
+from datetime import datetime
+ 
 
 
 #for home page
@@ -34,26 +38,75 @@ def events(request):
     return render(request, 'home/event_page.html', context)
 
 
+##################################################################################
 #creating event page
 @login_required(login_url='login')
 def create_event(request):
     if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
-            # Save the form and associate the logged-in user as the host
-            event = form.save(commit=False) 
-            event.host = request.user  
-            event.save()  
-            messages.success(request, "Event created successfully!")
-            return redirect('event-created')
+            event_data = form.cleaned_data
+            event_data['date'] = event_data['date'].isoformat()  # Convert datetime to string
+            request.session['event_data'] = event_data
+            return redirect('create-event-topic')
     else:
         form = EventForm()
     return render(request, 'home/create_event.html', {'form': form})
+
+@login_required(login_url='login')
+def create_event_topic(request):
+    if 'event_data' not in request.session:
+        return redirect('create-event') 
+
+    event_data = request.session.get('event_data')
+    # event_data['date'] = datetime.fromisoformat(event_data['date'])
+
+    if request.method == "POST":
+        form = TopicForm(request.POST)
+        if form.is_valid():
+            event_data['topics'] = list(form.cleaned_data['topics'].values_list('id', flat=True))
+            request.session['event_data'] = event_data 
+            return redirect('create-event-preview')  # Redirect to preview page
+    else:
+        form = TopicForm()
+
+    return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
+
+
+#(work here)
+@login_required(login_url='login')
+def create_event_preview(request):
+    event_data = request.session.get('event_data')
+    if not event_data:
+        return redirect('create-event')
+    
+    event_data['date'] = datetime.fromisoformat(event_data['date'])
+    topics = Topic.objects.filter(id__in=event_data.get('topics', []))
+
+    if request.method == "POST":
+
+        event = Event.objects.create(
+            host=request.user,
+            title=event_data['title'],
+            description=event_data['description'],
+            date=event_data['date'],
+            maxPeople=event_data['maxPeople'],
+        )
+        event.topics.set(topics)
+        request.session.pop('event_data', None)
+        messages.success(request, f"Event '{event.title}' created successfully!")
+        return redirect('event-created')
+    
+    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics})
+
 
 def event_created(request):
     if not messages.get_messages(request):
         return redirect('home')
     return render(request, 'home/event_success_page.html')
+
+  
+##################################################################################
 
 
 @login_required(login_url='login')

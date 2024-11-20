@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h2>Add Topics</h2>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.topics.id_for_label }}">{{ form.topics.label }}</label>
+        {{ form.topics }}
+    </div>
+    <button type="submit">Add Topic</button>
+</form>
+
+<!-- Ensure users cannot proceed to preview without completing the current form -->
+{% if form.is_valid %}
+    <a href="{% url 'create-event-preview' %}">Proceed to Preview</a>
+{% endif %}
+{% endblock content %}

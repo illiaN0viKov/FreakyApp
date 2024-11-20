@@ -9,13 +9,25 @@ from django.contrib.auth.models import User
 #creating user model
 #Integrate user model
 
+class Topic(models.Model):
+
+    
+    TOPIC_CHOICES = [
+    ('tech', 'Technology'),
+    ('art', 'Art'),
+    ('music', 'Music'),
+    ('sports', 'Sports'),
+    ('education', 'Education'),
+    ]
+
+    name = models.CharField(max_length=100, choices=TOPIC_CHOICES)
+
+    def __str__(self):
+        return self.name
+
 #creating a room model
 class Event(models.Model):
     host=models.ForeignKey(User, on_delete=models.CASCADE,verbose_name="Event Host")
-    
-    #think about how to create a topic model
-    #topic=models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True)
-
     title = models.CharField(max_length=255,verbose_name="Event Title")
     description = models.TextField(verbose_name="Event Description")
     date = models.DateTimeField(verbose_name="Event Date")
@@ -23,9 +35,11 @@ class Event(models.Model):
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
     maxPeople=models.IntegerField(verbose_name="Maximum People")
-     
+    topics = models.ManyToManyField(Topic, related_name='events', blank=True)
+
     def __str__(self):
         return f"{self.title} - Event"
+
 
 #Chat model
 class Chat(models.Model):
