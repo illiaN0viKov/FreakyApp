@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -118,10 +119,14 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/pictures/'
+
 STATICFILES_DIRS = [
-   BASE_DIR/'static',  
+   BASE_DIR / 'static',  
 ]
 
+
+MEDIA_ROOT = BASE_DIR / 'static/pictures'
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

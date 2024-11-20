@@ -7,7 +7,13 @@ from .forms import EventForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from .models import Event
- 
+from .forms import ProfileForm
+from .models import Profile
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
 
 #for home page
 def home(request):
@@ -54,6 +60,23 @@ def event_created(request):
 def profile(request):
     profile = request.user.profile
     return render(request, 'home/profile.html', {'profile': profile})
+
+
+
+
+def edit_profile(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+
+    return render(request, 'edit_profile.html', {'form': form})
 
 
 
