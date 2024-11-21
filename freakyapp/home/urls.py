@@ -17,5 +17,11 @@ urlpatterns = [
     path("created-event/", views.event_created, name="event-created"),
     path('create-event/preview/', views.create_event_preview, name='create-event-preview'),
     path("registration/", views.registration, name="registration"),
+
+
+    path("edit-event/<str:pk>/", views.editEvent, name="edit-event"),
+    path("edit-event-topics/", views.editTopics, name="edit-event-topics"),
+    path("edited-event/preview/", views.editPreview, name="edit-event-preview"),
+    path("edited-event/", views.editedEvent, name="edited-event")
     
 ]

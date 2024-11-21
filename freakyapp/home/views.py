@@ -8,10 +8,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from .models import Event
 from .forms import ProfileForm
-from .models import Profile
+from .models import Profile 
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.http import HttpResponse
 
 
 from .models import Event, Topic
@@ -176,8 +176,105 @@ def myEvents(request):
         'description': Event._meta.get_field('description').verbose_name,
         'date': Event._meta.get_field('date').verbose_name,
         'maxPeople': Event._meta.get_field('maxPeople').verbose_name,
+        'topics': Event._meta.get_field('topics').verbose_name
     }
     context={'myevents':myevents,
              'field_titles':field_titles}
     return render(request, 'home/my_events.html', context)
 
+
+
+
+
+
+def editEvent(request, pk):
+    try:
+        event = Event.objects.get(id=pk)
+    except Event.DoesNotExist:
+        return HttpResponse('Event not found.')
+
+    if request.user != event.host:
+        return HttpResponse('You are not allowed here!')
+
+    form = EventForm(instance=event)
+
+    if request.method == "POST":
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            event.title = form.cleaned_data['title']
+            event.description = form.cleaned_data['description']
+            event.date = form.cleaned_data['date']
+            event.maxPeople = form.cleaned_data['maxPeople']
+            event.save()
+
+            # Add topics to session data
+            event_data = {
+                'id': event.id,
+                'title': event.title,
+                'description': event.description,
+                'date': event.date.isoformat(),
+                'maxPeople': event.maxPeople,
+                'topics': list(event.topics.values_list('id', flat=True))  # Store current topics
+            }
+            request.session['saved_event_data'] = event_data
+
+            return redirect('edit-event-topics')
+
+    context = {'form': form, 'event': event}
+    return render(request, 'home/create_event.html', context)
+
+def editTopics(request):
+    if 'saved_event_data' not in request.session:
+        return redirect('edit-event')
+
+    event_data = request.session.get('saved_event_data')
+
+    # Fetch topics previously selected
+    selected_topic_ids = event_data.get('topics', [])
+    selected_topics = Topic.objects.filter(id__in=selected_topic_ids)
+
+    if request.method == "POST":
+        form = TopicForm(request.POST)
+        if form.is_valid():
+            # Get selected topics
+            selected_topics = form.cleaned_data['topics']
+            event_data['topics'] = list(selected_topics.values_list('id', flat=True))
+            request.session['saved_event_data'] = event_data
+            return redirect('edit-event-preview')
+    else:
+        form = TopicForm(initial={'topics': selected_topic_ids})  # Initialize with topic IDs
+
+    return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
+
+def editPreview(request):
+    event_data = request.session.get('saved_event_data')
+    if not event_data:
+        return redirect('edit-event')
+
+    try:
+        event = Event.objects.get(id=event_data.get('id'))
+    except Event.DoesNotExist:
+        return HttpResponse("Event does not exist.")
+
+    topics = Topic.objects.filter(id__in=event_data.get('topics', []))
+
+    if request.method == "POST":
+        event.title = event_data['title']
+        event.description = event_data['description']
+        event.date = event_data['date']
+        event.maxPeople = event_data['maxPeople']
+        event.save()
+
+        if topics:
+            event.topics.set(topics)
+
+        messages.success(request, f"Event '{event.title}' updated successfully!")
+        request.session.pop('saved_event_data', None)  # Clear session data
+        return redirect('edited-event')
+
+    return render(request, 'home/create_event_preview.html', {'event_data': event_data, 'topics': topics})
+
+def editedEvent(request):
+    if not messages.get_messages(request):
+        return redirect('home')
+    return render(request, 'home/event_success_page.html')
