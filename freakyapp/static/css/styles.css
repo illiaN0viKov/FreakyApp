@@ -298,6 +298,7 @@ h2 {
   color: #333;
   text-align: center;
   margin-bottom: 20px;
+  justify-content: center;
 }
 
 /* Form Styling */
@@ -373,3 +374,235 @@ textarea:focus {
 }
 
 
+.input-event {
+  display: flex;
+  flex-direction: column; /* Stack the elements vertically */
+  align-items: center; /* Center horizontally *//* Align items at the top */
+  margin-top: 3vh; /* Shift the container 25% from the top of the viewport */
+  width: 100%; /* Ensure full width */
+  text-align: center; /* Center text inside elements */
+  
+}
+
+.form-group-title {
+  display: flex;
+  flex-direction: column; /* Stack the label above the input */
+  margin-bottom: 0.5em; /* Add spacing below the field */
+  margin-top: 0.7em; /* Add spacing below the field */
+  align-items: center;
+}
+
+.form-group-title label {
+  font-weight: bold; /* Makes the label bold */
+  font-size: 1.2em; /* Slightly larger font for better visibility */
+  color: #333; /* Dark gray for a clean look */
+  margin-bottom: 3px; /* Spacing between the label and the input field */
+}
+
+.form-group-title input {
+  border: 1px solid #000; /* Solid black border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Internal padding for a better user experience */
+  font-size: 1em; /* Readable font size */
+  width: 100%; /* Full-width for responsiveness */
+  outline: none; /* Removes default outline */
+  transition: border-color 0.3s ease; /* Smooth border color transition */
+}
+
+.form-group-title input:focus {
+  border-color: #007BFF; /* Blue border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus glow */
+}
+
+.form-group-description {
+  display: flex;
+  flex-direction: column; /* Stack the label above the input */ /* Add spacing below the field */
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.form-group-description  label {
+  font-weight: bold; /* Makes the label bold */
+  font-size: 1.2em; /* Slightly larger font for better visibility */
+  color: #333; /* Dark gray for a clean look */
+  margin-bottom: 3px; /* Spacing between the label and the input field */
+}
+
+.form-group-description input, 
+.form-group-description textarea {
+  border: 1px solid #000; /* Solid black border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Internal padding for better usability */
+  font-size: 1em; /* Consistent font size */
+  width: 100%; /* Full width for responsiveness */
+  outline: none; /* Removes default focus outline */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.form-group textarea {
+  resize: none; 
+  min-height: 130px; 
+}
+
+.form-group-description  input:focus {
+  border-color: #007BFF; /* Blue border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus glow */
+}
+
+.form-group-people {
+  display: flex;
+  flex-direction: column; /* Stack the label above the input */ /* Add spacing below the field */
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.form-group-people label {
+  font-weight: bold; /* Makes the label bold */ /* Slightly larger font for better visibility */
+  color: #333; /* Dark gray for a clean look */
+  margin-bottom: 3px; /* Spacing between the label and the input field */
+}
+
+.form-group-people input {
+  border: 1px solid #000; /* Solid black border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Internal padding for better usability */
+  font-size: 1em; /* Consistent font size */
+  width: 100%; /* Full width for responsiveness */
+  outline: none; /* Removes default focus outline */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.form-group textarea {
+  resize: none; 
+  min-height: 130px; 
+}
+
+.form-group-people input:focus {
+  border-color: #007BFF; /* Blue border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus glow */
+}
+
+
+.form-group-date {
+  display: flex;
+  flex-direction: column; /* Stack the label above the input */ /* Add spacing below the field */
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.form-group-date label {
+  font-weight: bold; /* Makes the label bold */ /* Slightly larger font for better visibility */
+  color: #333; /* Dark gray for a clean look */
+  margin-bottom: 3px; /* Spacing between the label and the input field */
+}
+
+.form-group-date input {
+  border: 1px solid #000; /* Solid black border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Internal padding for better usability */
+  font-size: 1em; /* Consistent font size */
+  width: 100%; /* Full width for responsiveness */
+  outline: none; /* Removes default focus outline */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+
+
+.form-group-date input:focus {
+  border-color: #007BFF; /* Blue border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus glow */
+}
+
+.people-date {
+  display: flex; /* Use flexbox for a row layout */
+  justify-content: space-between; /* Distribute space between the fields */
+  gap: 1em; /* Add space between the fields */
+  width: 100%; /* Ensure that the container does not exceed its parent's width */
+  
+}
+
+.btn-next {
+  background-color: #007BFF; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 15px; /* Comfortable padding */
+  font-size: 1em; /* Consistent font size */
+  cursor: pointer; /* Pointer cursor when hovered */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for background and scaling */
+}
+
+.btn-next:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+.btn-next:focus {
+  outline: none; /* Remove focus outline */
+}
+
+h4 {
+  font-size: 1.6em;
+}
+
+.basic-info {
+  margin-top: 20px; /* Add space above the heading */
+  border-bottom: 2px solid #333; /* Add a solid line underneath */
+  padding-bottom: 3px; /* Space between text and the line */
+  font-size: 1.8em; /* Increase font size for better visibility */
+  font-weight: bold; /* Make the text bold */
+  color: #333; /* Dark text color */
+  text-align: center; /* Center the heading text */
+}
+
+.topics-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-grow: 1;
+  overflow-y: auto
+}
+
+.topic-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px; /* Adjust padding for consistent margins */
+  margin: 5px;
+  background-color: #f0f0f0;
+  border-radius: 30px; /* Makes it elliptical */
+  border: 2px solid #ccc;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.topic-label input[type="checkbox"] {
+  display: none;
+}
+
+.topic-label span {
+  pointer-events: none;
+  white-space: nowrap; /* Prevents text wrapping */
+}
+
+.topic-label:has(input[type="checkbox"]:checked) {
+  color: #007BFF; /* Highlighted background color */
+  border-color: #007BFF; /* Text color when selected */
+}
+
+/* Ensures that the ellipse grows with text */
+.topic-label {
+  min-width: 60px; /* Minimum width for short text */
+  height: auto; /* Allows the height to adjust dynamically */
+  padding: 8px 20px; /* Adjust padding for consistent spacing */
+}
+
+.topics-btn {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; /* Optional: Adjust spacing from the bottom */
+}
