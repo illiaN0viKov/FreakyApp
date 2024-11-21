@@ -18,6 +18,7 @@ class Topic(models.Model):
     ('music', 'Music'),
     ('sports', 'Sports'),
     ('education', 'Education'),
+    ('football', 'Football'),
     ]
 
     name = models.CharField(max_length=100, choices=TOPIC_CHOICES)

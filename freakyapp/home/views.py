@@ -129,7 +129,7 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
 
 
-    return render(request, 'edit_profile.html', {'form': form})
+    return render(request, 'home/edit_profile.html', {'form': form})
 
 
 
