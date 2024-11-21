@@ -5,6 +5,7 @@
 <p><strong>Title:</strong> {{ event_data.title }}</p>
 <p><strong>Description:</strong> {{ event_data.description }}</p>
 <p><strong>Date:</strong> {{ event_data.date }}</p>
+<p><strong>Max People:</strong> {{ event_data.maxPeople }}</p>
 <p><strong>Topics:</strong></p>
 <ul>
     {% for topic in topics %}
@@ -13,6 +14,6 @@
 </ul>
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Finalize and Create Event</button>
+    <button type="submit">Finalize and Create/Edit Event</button>
 </form>
 {% endblock content %}
