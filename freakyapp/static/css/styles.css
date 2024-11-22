@@ -606,3 +606,208 @@ h4 {
   justify-content: center;
   margin-bottom: 20px; /* Optional: Adjust spacing from the bottom */
 }
+
+.card-link {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Ensures text color matches parent styles */
+  display: block; /* Makes the <a> tag fill the card area */
+}
+
+.card-link:hover, .card-link:focus {
+  text-decoration: none; /* Prevents underline on hover/focus */
+  color: inherit; /* Keeps color consistent */
+}
+
+.card {
+  cursor: pointer; /* Adds a pointer cursor */
+}
+
+
+.details-container {
+  width: 50%;
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.page-title {
+  text-align: center;
+  color: #343a40;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.event-details {
+  margin-top: 20px;
+}
+
+.detail-item {
+  font-size: 16px;
+  margin: 10px 0;
+  line-height: 1.6;
+  color: #495057;
+}
+
+.detail-item-description {
+  background: #fff;
+  padding: 20px; /* Increase padding for more inner space */
+  border: 1px solid #ced4da;
+  border-radius: 5px; /* Keep corners slightly rounded */
+  font-size: 14px;
+  width: 100%; /* Make it span the full container width */
+  height: 150px; /* Define a fixed height */
+  box-sizing: border-box; /* Ensure padding doesn't affect width/height */
+  overflow-y: auto; /* Add scroll if content exceeds height */
+  resize: none; /* Prevent resizing */
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.details-row .detail-item {
+  width: 45%;
+  text-align: center;
+}
+
+.topics-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows topics to wrap to the next line if space is limited */
+  gap: 10px; /* Adds spacing between the topics */
+  margin-top: 10px;
+}
+
+.topic-label-details{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 15px; /* Adjust padding for consistent margins */
+  margin: 5px;
+  background-color: #f0f0f0;
+  border-radius: 30px; /* Makes it elliptical */
+  border: 2px solid #007BFF;
+  color: #007BFF;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  min-width: 60px; /* Minimum width for short text */
+  height: auto; /* Allows the height to adjust dynamically */
+  padding: 8px 20px; /* Adjust padding for consistent spacing */
+}
+
+
+/* Style for the "Joined" button */
+.btn-joined {
+  background-color: #9d9d9d; /* Green background */
+  color: white;  /* White text */
+  border: 1px solid #000000; /* Slightly darker border for the green button */
+  padding: 15px 40px;  /* Padding to make the button larger */
+  font-size: 16px;  /* Increase font size */
+  cursor: not-allowed;  /* Indicate it's not clickable */
+  border-radius: 5px;  /* Rounded corners */
+  position: relative;  /* Position relative for the tooltip */
+  display: flex;  /* Enable flexbox */
+  justify-content: center;  /* Center content horizontally */
+  align-items: center;  /* Center content vertically */
+}
+
+/* Hover effect */
+.btn-joined:hover {
+  background-color: #9b9b9b;  /* Darker green when hovering */
+  opacity: 0.9;  /* Slightly transparent effect */
+}
+
+/* Tooltip style */
+.btn-joined::after {
+  content: "You are already joined";  /* Message to show when hovered */
+  position: absolute;
+  top: -30px;  /* Position the tooltip above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;  /* Dark background */
+  color: white;  /* White text */
+  padding: 5px 10px;  /* Padding for the tooltip */
+  border-radius: 3px;  /* Rounded corners for the tooltip */
+  visibility: hidden;  /* Hide the tooltip by default */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;  /* Smooth fade-in */
+}
+
+/* Tooltip visibility on hover */
+.btn-joined:hover::after {
+  visibility: visible;  /* Make the tooltip visible */
+  opacity: 1;  /* Full opacity when hovered */
+}
+
+.event-actions {
+  display: flex;  /* Enable flexbox */
+  flex-direction: column;  /* Stack items vertically */
+  justify-content: center;  /* Center items vertically within the container */
+  align-items: center;  /* Center items horizontally */
+  width: 100%;  /* Make sure the container spans the full width */
+  height: 100%;  /* Ensure the container takes full height */
+  text-align: center;  /* Center text within the items */
+  padding: 20px;  /* Optional: Add some padding around the container */
+}
+
+.btn-join {
+  background-color: #09bb0c; /* Blue background */
+  color: white; /* White text */
+  border: 1px solid #000000; /* Slightly darker border for the green button */
+  padding: 15px 40px;  /* Padding to make the button larger */
+  font-size: 16px;  /* Increase font size */
+  cursor: pointer;  /* Indicate it's not clickable */
+  border-radius: 5px;  /* Rounded corners */
+  position: relative;  /* Position relative for the tooltip */
+  display: flex;  /* Enable flexbox */
+  justify-content: center;  /* Center content horizontally */
+  align-items: center;  /* Center content vertically */
+}
+
+
+.btn-full {
+  background-color: #9d9d9d; /* Green background */
+  color: white;  /* White text */
+  border: 1px solid #000000; /* Slightly darker border for the green button */
+  padding: 15px 40px;  /* Padding to make the button larger */
+  font-size: 16px;  /* Increase font size */
+  cursor: not-allowed;  /* Indicate it's not clickable */
+  border-radius: 5px;  /* Rounded corners */
+  position: relative;  /* Position relative for the tooltip */
+  display: flex;  /* Enable flexbox */
+  justify-content: center;  /* Center content horizontally */
+  align-items: center;  /* Center content vertically */
+}
+
+/* Hover effect */
+.btn-full:hover {
+  background-color: #9b9b9b;  /* Darker green when hovering */
+  opacity: 0.9;  /* Slightly transparent effect */
+}
+
+/* Tooltip style */
+.btn-full:after {
+  content: "This event already full";  /* Message to show when hovered */
+  position: absolute;
+  top: -30px;  /* Position the tooltip above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;  /* Dark background */
+  color: white;  /* White text */
+  padding: 5px 10px;  /* Padding for the tooltip */
+  border-radius: 3px;  /* Rounded corners for the tooltip */
+  visibility: hidden;  /* Hide the tooltip by default */
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;  /* Smooth fade-in */
+}
+
+/* Tooltip visibility on hover */
+.btn-full:hover::after {
+  visibility: visible;  /* Make the tooltip visible */
+  opacity: 1;  /* Full opacity when hovered */
+}

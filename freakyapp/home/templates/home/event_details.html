@@ -1,6 +1,62 @@
 {% extends "main.html" %}
 
-
 {% block content %}
-    <H1>EVENT DETAILS PAGE</H1>
+    <div class="details-container">
+        <h1 class="page-title">Event Details</h1>
+
+        <div class="event-details">
+            <p class="detail-item"><strong>Host:</strong> {{ event.host }}</p>
+            <p class="detail-item"><strong>Event Title:</strong> {{ event.title }}</p>
+            <p class="detail-item"><strong>Event Description:</strong></p>
+            <p class="detail-item-description">{{ event.description }}</p>
+            <div class="details-row">
+                <div class="detail-item">
+                    <strong>People Joined/Maximum:</strong>
+                    <p>{{event.participants.count}}/{{ event.maxPeople }}</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Event Date:</strong>
+                    <p>{{ event.date|date:"m/d/Y" }}</p>
+                </div>
+            </div>
+            <div class="detail-item">
+                <strong>Topics:</strong>
+                <div class="topics-container">
+                    {% for topic in event.topics.all %}
+                        <span class="topic-label-details">{{ topic }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-actions">
+        {% if event.host == request.user %}
+            <!-- Buttons for the Event Host -->
+
+            <form action="{% url 'edit-event' event.id %}" method="POST" >
+                {% csrf_token %}
+                <button type="submit" class="btn-edit">Edit</button>
+            </form>
+
+            <form action="." method="POST" >
+                {% csrf_token %}
+                <button type="submit" class="btn-delete">Delete</button>
+            </form>
+
+        {% elif user_has_joined %}
+            <button class="btn-joined" disabled>Joined</button>
+            
+        {% elif not has_space%}    
+            <button class="btn-full" disabled>Full</button>
+
+        {% else %}
+            <!-- Button for Guests -->
+
+            <form action="{% url 'join-event' event.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn-join">Join Event</button>
+            </form>
+        {% endif %}
+    </div>
 {% endblock content %}

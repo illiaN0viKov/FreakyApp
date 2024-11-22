@@ -32,14 +32,23 @@ class Event(models.Model):
     title = models.CharField(max_length=255,verbose_name="Event Title")
     description = models.TextField(verbose_name="Event Description")
     date = models.DateTimeField(verbose_name="Event Date")
-    usersJoined=models.ManyToManyField(User, related_name='participants', blank=True) 
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
     maxPeople=models.IntegerField(verbose_name="Maximum People")
-    topics = models.ManyToManyField(Topic, related_name='events', blank=True)
+    topics = models.ManyToManyField(Topic, related_name='events', blank=False)
+    participants = models.ManyToManyField(User, related_name="joined_event", blank=True) 
 
     def __str__(self):
         return f"{self.title} - Event"
+    
+    def has_space(self):
+        return self.participants.count() < self.maxPeople
+
+    def is_user_joined(self, user):
+        return self.participants.filter(id=user.id).exists()
+    
+    
+
 
 
 #Chat model

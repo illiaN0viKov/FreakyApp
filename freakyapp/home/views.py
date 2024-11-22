@@ -3,12 +3,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .forms import EventForm, TopicForm
+from .forms import EventForm, TopicForm, ProfileForm
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
-from .models import Event
-from .forms import ProfileForm
-from .models import Profile 
+from .models import Event, Profile
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
@@ -73,7 +71,6 @@ def create_event_topic(request):
     return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
 
 
-#(work here)
 @login_required(login_url='login')
 def create_event_preview(request):
     event_data = request.session.get('event_data')
@@ -278,3 +275,29 @@ def editedEvent(request):
     if not messages.get_messages(request):
         return redirect('home')
     return render(request, 'home/event_success_page.html')
+
+
+def event_details(request, pk):
+    event= get_object_or_404(Event, pk=pk)
+    user_has_joined = event.is_user_joined(request.user)
+    has_space = event.has_space()
+    return render(request, 'home/event_details.html', {'event': event, 'user_has_joined': user_has_joined,
+                                                        'has_space': has_space})
+
+
+# @login_required
+# def join_event(request, pk):
+#     event = get_object_or_404(Event, pk=pk)
+#     event.participants.add(request.user)
+#     return render('/event-details/joined', pk=pk)
+
+@login_required
+def join_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.participants.add(request.user)
+    return redirect('event-details', pk=pk)
+
+
+
+#to implement, need to add particapants to model connected to user, add function to keep the count  of paticipants, and check if user is already is joined. 
+#add the proper html on event details page, add joined events page, create leave event function. 
