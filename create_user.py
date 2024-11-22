@@ -13,45 +13,50 @@ credentials = [
     ["FrozenFire48", "J8nF2hV3"], ["ThunderClap19", "g7Pq9sX1"], ["NightRider56", "iD3fW2v5"],
 ]
 
+#Change only first element of the list
+username = credentials[3][0]
+password = credentials[3][1]
+#############################################
+
+
 # Initialize WebDriver
 driver = webdriver.Chrome()
 
 driver.get('http://127.0.0.1:8000/profile')
 
-# Wait for the page to load
+
 time.sleep(2)
 
-# Locate the "Sign Up" link and click on it
+
 sign_up_link = driver.find_element(By.LINK_TEXT, 'Sign Up')
 sign_up_link.click()
 
-# Wait for the sign-up page to load
 time.sleep(2)
 
-# Loop through the credentials list and sign up each user
-for username, password in credentials:
-    # Locate the fields for username, password1, and password2
-    username_field = driver.find_element(By.NAME, 'username')  
-    password1_field = driver.find_element(By.NAME, 'password1')  
-    password2_field = driver.find_element(By.NAME, 'password2')  
+username_field = driver.find_element(By.NAME, 'username')  
+password1_field = driver.find_element(By.NAME, 'password1')  
+password2_field = driver.find_element(By.NAME, 'password2')  
 
-    # Fill in the fields with the username and password
-    username_field.send_keys(username)
-    password1_field.send_keys(password)
-    password2_field.send_keys(password)
+username_field.send_keys(username)
 
-    # Submit the form
-    password2_field.send_keys(Keys.RETURN)
+password1_field.send_keys(password)
+password2_field.send_keys(password)
 
-    # Locate and click the "Create User" button
-    create_user_btn = driver.find_element(By.XPATH, '/html/body/form/button')
-    create_user_btn.click()
+create_user_btn = driver.find_element(By.XPATH, '/html/body/form/button')
+create_user_btn.click()
 
-    # Wait for the form submission to process
-    time.sleep(2)
 
-# Print "Login Page" after all users have been created
-print('All users have been signed up.')
+time.sleep(2)
 
-# Close the browser
+username_field = driver.find_element(By.NAME, 'username')
+password_field = driver.find_element(By.NAME, 'password')  
+
+username_field.send_keys(username)
+password_field.send_keys(password)
+
+login_btn = driver.find_element(By.XPATH, '/html/body/form/button')
+login_btn.click()
+
+
+input("Enter to close the web app...")
 driver.quit()

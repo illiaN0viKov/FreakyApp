@@ -40,3 +40,9 @@ Thumbs.db
 
 # Environment variable files
 .env
+
+*/migrations/*
+!*/migrations/__init__.py
+
+# Ignore SQLite database file
+db.sqlite3
