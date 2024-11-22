@@ -10,7 +10,7 @@ from .models import Event, Profile
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponse
-
+from datetime import datetime, date
 
 from .models import Event, Topic
 from datetime import datetime
@@ -165,6 +165,38 @@ def registration(request):
 
 
 #open only when you already logIn
+
+
+from datetime import datetime
+
+from datetime import date
+
+def myEvents(request):
+    today = date.today()  # Get today's date (not including time)
+
+    # Delete events with a date before today
+    Event.objects.filter(date__lt=today).delete()
+
+    # Fetch non-expired events for the current user
+    myevents = Event.objects.filter(host=request.user, date__gte=today)
+
+    field_titles = {
+        'host': Event._meta.get_field('host').verbose_name,
+        'title': Event._meta.get_field('title').verbose_name,
+        'description': Event._meta.get_field('description').verbose_name,
+        'date': Event._meta.get_field('date').verbose_name,
+        'maxPeople': Event._meta.get_field('maxPeople').verbose_name,
+        'topics': Event._meta.get_field('topics').verbose_name,
+    }
+
+    context = {
+        'myevents': myevents,
+        'field_titles': field_titles,
+    }
+    return render(request, 'home/my_events.html', context)
+
+
+'''
 def myEvents(request):
     myevents = Event.objects.filter(host=request.user)
     field_titles = {
@@ -178,6 +210,7 @@ def myEvents(request):
     context={'myevents':myevents,
              'field_titles':field_titles}
     return render(request, 'home/my_events.html', context)
+    '''
 
 
 
