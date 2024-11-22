@@ -27,10 +27,18 @@ def home(request):
 #for event page
 def events(request):
     q=request.GET.get('q') if request.GET.get('q') != None else ''
-    events=Event.objects.filter(
-        Q(title__icontains=q)|
-        Q(description__icontains=q)
-        )
+    topic_filter = request.GET.get('topic', None)  
+
+   
+    query_filter = Q(title__icontains=q) | Q(description__icontains=q)
+
+   
+    if topic_filter:
+        query_filter &= Q(topics__name=topic_filter)
+
+    events = Event.objects.filter(query_filter)
+
+    topics = Topic.objects.all()
         
     field_titles = {
         'host': Event._meta.get_field('host').verbose_name,
