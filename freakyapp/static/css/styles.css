@@ -807,7 +807,7 @@ h4 {
 }
 
 /* Tooltip visibility on hover */
-.btn-full:hover::after {
+.btn-full:hover:after {
   visibility: visible;  /* Make the tooltip visible */
   opacity: 1;  /* Full opacity when hovered */
 }
