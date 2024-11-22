@@ -28,7 +28,16 @@ body {
   padding: 20px;
 }
 
+.my-events-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px; /* Reduced gap between cards */
+  padding: 20px;
+}
+
 .card {
+  position: relative;
   background-color: #fff;
   border-radius: 8px; /* Slightly smaller radius */
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
@@ -39,6 +48,17 @@ body {
   align-items: start;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   margin-bottom: 20px; /* Reduced bottom margin */
+  text-wrap: wrap;
+}
+
+.my-events-page .card::before {
+  content: '★'; /* Star character */
+  position: absolute;
+  top: 5px; /* Distance from the top of the card */
+  left: 15px; /* Distance from the left of the card */
+  font-size: 30px; /* Adjust the size of the star */
+  color: #FFD700; /* Gold color for the star */
+  z-index: 1; /* Ensures the star is above the card content */
 }
 
 .card:hover {
@@ -71,6 +91,7 @@ body {
   color: #333;
   font-weight: 600;
 }
+
 
 /* No events message */
 .no-events {

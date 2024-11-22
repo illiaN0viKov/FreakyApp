@@ -4,9 +4,12 @@
 
 <h2>My Events</h2>
 
-<div class="events-container">
+<div class="my-events-page">
     {% for event in myevents %}
     <div class="card">
+
+        <div class="triangle"> </div>
+
         <div class="card-header">
             <h2 class="card-title">{{ field_titles.title }}: {{ event.title }}</h2>
         </div>
