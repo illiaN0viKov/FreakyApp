@@ -218,7 +218,7 @@ def editEvent(request, pk):
             return redirect('edit-event-topics')
 
     context = {'form': form, 'event': event}
-    return render(request, 'home/create_event.html', context)
+    return render(request, 'home/edit_event.html', context)
 
 def editTopics(request):
     if 'saved_event_data' not in request.session:
@@ -241,7 +241,7 @@ def editTopics(request):
     else:
         form = TopicForm(initial={'topics': selected_topic_ids})  # Initialize with topic IDs
 
-    return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
+    return render(request, 'home/edit_event_topic.html', {'form': form, 'event_data': event_data})
 
 def editPreview(request):
     event_data = request.session.get('saved_event_data')
@@ -269,12 +269,25 @@ def editPreview(request):
         request.session.pop('saved_event_data', None)  # Clear session data
         return redirect('edited-event')
 
-    return render(request, 'home/create_event_preview.html', {'event_data': event_data, 'topics': topics})
+    return render(request, 'home/edit_event_preview.html', {'event_data': event_data, 'topics': topics})
 
 def editedEvent(request):
     if not messages.get_messages(request):
         return redirect('home')
-    return render(request, 'home/event_success_page.html')
+    return render(request, 'home/edit_success_page.html')
+
+
+def deleteEvent(request, pk):
+    event=Event.objects.get(id=pk)
+
+#checking if the user who want to delete a room is the same who create it
+    if request.user != event.host:
+        return HttpResponse('You are not allowed here!!')
+
+    if request.method=='POST':
+        event.delete()
+        return redirect('home')
+    return render(request, 'home/delete_event.html', {'obj':event})
 
 
 def event_details(request, pk):

@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{% block content %}
+<h2>Edit Event: Choose Topics</h2>
+<form method="post">
+    {% csrf_token %}
+
+    <div class="input-event">
+        <div class="topics-container">
+            {% for checkbox in form.topics %}
+                <label class="topic-label">
+                    {{ checkbox.tag }}
+                    <span>{{ checkbox.choice_label }}</span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="topics-btn">
+        <button type="submit" class="btn-next">Add Topics</button>
+    </div>
+    
+</form>
+
+{% if form.is_valid %}
+    <a href="{% url 'create-event-preview' %}">Proceed to Preview</a>
+{% endif %}
+{% endblock content %}

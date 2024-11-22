@@ -22,6 +22,8 @@ urlpatterns = [
     path("edit-event-topics/", views.editTopics, name="edit-event-topics"),
     path("edited-event/preview/", views.editPreview, name="edit-event-preview"),
     path("edited-event/", views.editedEvent, name="edited-event"),
+    path("delete-event/<str:pk>", views.deleteEvent, name="delete-event"),
+
     
     path("event-details/<str:pk>/", views.event_details, name="event-details"),
      path('join-event/<str:pk>/', views.join_event, name='join-event'),

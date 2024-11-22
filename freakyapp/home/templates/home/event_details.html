@@ -34,15 +34,13 @@
         {% if event.host == request.user %}
             <!-- Buttons for the Event Host -->
 
-            <form action="{% url 'edit-event' event.id %}" method="POST" >
-                {% csrf_token %}
-                <button type="submit" class="btn-edit">Edit</button>
-            </form>
-
-            <form action="." method="POST" >
-                {% csrf_token %}
-                <button type="submit" class="btn-delete">Delete</button>
-            </form>
+            
+            <a href="{%url 'edit-event' pk=event.id%}">
+                <button class="edit-button">Edit Event</button>
+            </a>
+            <a href="{% url 'delete-event' pk=event.id%}">
+                <button class="edit-button">Delete Event</button>
+            </a>
 
         {% elif user_has_joined %}
             <button class="btn-joined" disabled>Joined</button>

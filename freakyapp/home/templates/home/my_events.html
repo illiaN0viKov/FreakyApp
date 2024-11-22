@@ -11,7 +11,9 @@
         <div class="triangle"> </div>
 
         <div class="card-header">
+            <a href=" {% url 'event-details' event.id %}">
             <h2 class="card-title">{{ field_titles.title }}: {{ event.title }}</h2>
+        </a>
         </div>
         <div class="card-body">
             <p><strong>{{ field_titles.host }}:</strong> {{ event.host }}</p>
@@ -31,7 +33,7 @@
             <a href="{%url 'edit-event' pk=event.id%}">
                 <button class="edit-button">Edit Event</button>
             </a>
-            <a href="">
+            <a href="{% url 'delete-event' pk=event.id%}">
                 <button class="edit-button">Delete Event</button>
             </a>
         </div>
