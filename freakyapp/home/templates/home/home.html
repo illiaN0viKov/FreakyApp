@@ -1,13 +1,11 @@
 {% extends "main.html" %}
 
-
 {% block content %}
-
 <div class="search_bar">
     <h2>Welcome to FreakyApp</h2>
-    <input type="text" placeholder="Find Event">
-    <input type="submit" value="Search">
-    <!--Think about content in home page-->
+    <form action="{% url 'events' %}" method="get">
+        <input type="text" name="q" placeholder="Key Word of Event..." required=True>
+        <input type="submit" value="Search">
+    </form>
 </div>
-
 {% endblock content %}

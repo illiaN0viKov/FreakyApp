@@ -324,19 +324,9 @@ def event_details(request, pk):
                                                         'has_space': has_space})
 
 
-# @login_required
-# def join_event(request, pk):
-#     event = get_object_or_404(Event, pk=pk)
-#     event.participants.add(request.user)
-#     return render('/event-details/joined', pk=pk)
 
 @login_required
 def join_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     event.participants.add(request.user)
     return redirect('event-details', pk=pk)
-
-
-
-#to implement, need to add particapants to model connected to user, add function to keep the count  of paticipants, and check if user is already is joined. 
-#add the proper html on event details page, add joined events page, create leave event function. 

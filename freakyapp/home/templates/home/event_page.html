@@ -7,10 +7,15 @@
 <div class="search-bar">
 <form class="header__search" method="GET" action="{% url 'events'%}">
     <label>
-    
+      <form method="get">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search for events..."
+            value="{{ request.GET.q|default:'' }}"
+        >
         <title>search</title>
   
-      <input name="q" placeholder="Search for events..." />
     </label>
 
     
