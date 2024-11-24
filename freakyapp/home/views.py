@@ -330,3 +330,17 @@ def join_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     event.participants.add(request.user)
     return redirect('event-details', pk=pk)
+
+
+
+def calendar_view(request):
+    joined_events = Event.objects.filter(participants=request.user)
+    events = [
+        {
+            "title": event.title,
+            "start": event.date.isoformat(),
+            "url": reverse('event-details', args=[event.id])  # generates the event details URL
+        }
+        for event in joined_events
+    ]
+    return render(request, 'home/calendar.html', {'events': events})
