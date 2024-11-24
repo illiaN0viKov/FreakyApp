@@ -332,15 +332,18 @@ def join_event(request, pk):
     return redirect('event-details', pk=pk)
 
 
-
 def calendar_view(request):
-    joined_events = Event.objects.filter(participants=request.user)
-    events = [
-        {
-            "title": event.title,
-            "start": event.date.isoformat(),
-            "url": reverse('event-details', args=[event.id])  # generates the event details URL
-        }
-        for event in joined_events
-    ]
+    if request.user.is_authenticated:
+        joined_events = Event.objects.filter(participants=request.user)
+        events = [
+            {
+                "title": event.title,
+                "start": event.date.isoformat(),
+                "url": reverse('event-details', args=[event.id])  # generates the event details URL
+            }
+            for event in joined_events
+        ]
+    else:
+        events = []  # empty list for anonymous users
+
     return render(request, 'home/calendar.html', {'events': events})
