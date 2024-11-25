@@ -1,19 +1,40 @@
 {% extends "main.html" %}
 
 {% block content %}
-<h2>Preview Event</h2>
-<p><strong>Title:</strong> {{ event_data.title }}</p>
-<p><strong>Description:</strong> {{ event_data.description }}</p>
-<p><strong>Date:</strong> {{ event_data.date }}</p>
-<p><strong>Max People:</strong> {{ event_data.maxPeople }}</p>
-<p><strong>Topics:</strong></p>
-<ul>
-    {% for topic in topics %}
-        <li>{{ topic.name }}</li>
-    {% endfor %}
-</ul>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Finalize and Create/Edit Event</button>
-</form>
+
+    <div class="details-container">
+        <h1 class="page-title">Event Details Preview</h1>
+
+        <div class="event-details">
+            <p class="detail-item"><strong>Host:</strong> {{ event_data.host }}</p>
+            <p class="detail-item"><strong>Event Title:</strong> {{ event_data.title }}</p>
+            <p class="detail-item"><strong>Event Description:</strong></p>
+            <p class="detail-item-description">{{ event_data.description }}</p>
+            <div class="details-row">
+                <div class="detail-item">
+                    <strong>People Joined/Maximum:</strong>
+                    <p>{{ event_data.participants.count|default:"0"}}/{{ event_data.maxPeople }}</p>
+                </div>
+                <div class="detail-item">
+                    <strong>Event Date:</strong>
+                    <p>{{ event_data.date|date:"m/d/Y" }}</p>
+                </div>
+            </div>
+            <div class="detail-item">
+                <strong>Topics:</strong>
+                <div class="topics-container">
+                    {% for topic in topics.all %}
+                        <span class="topic-label-details">{{ topic }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-actions">
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="create-event-btn">Create Event</button>
+        </form>
+    </div>
 {% endblock content %}

@@ -8,7 +8,7 @@ fi
 
 # Activate the virtual environment
 echo "Activating the virtual environment..."
-source ./.venv/bin/activate
+source ./.venv/scripts/activate
 
 # Install the dependencies from requirements.txt
 echo "Installing dependencies..."
@@ -17,6 +17,8 @@ pip install -r requirements.txt
 
 echo "Dependencies installed successfully."
 
+
+git pull request origin main
 cd freakyapp
 python manage.py makemigrations
 python manage.py migrate

@@ -832,3 +832,19 @@ h4 {
   visibility: visible;  /* Make the tooltip visible */
   opacity: 1;  /* Full opacity when hovered */
 }
+
+.create-event-btn {
+
+  background-color: #09bb0c; /* Blue background */
+  color: white; /* White text */
+  border: 1px solid #000000; /* Slightly darker border for the green button */
+  padding: 15px 40px;  /* Padding to make the button larger */
+  font-size: 16px;  /* Increase font size */
+  cursor: pointer;  /* Indicate it's not clickable */
+  border-radius: 5px;  /* Rounded corners */
+  position: relative;  /* Position relative for the tooltip */
+  display: flex;  /* Enable flexbox */
+  justify-content: center;  /* Center content horizontally */
+  align-items: center;  /* Center content vertically */
+  
+}

@@ -95,6 +95,7 @@ def create_event_preview(request):
     
     event_data['date'] = datetime.fromisoformat(event_data['date'])
     topics = Topic.objects.filter(id__in=event_data.get('topics', []))
+    event_data['host'] = request.user.username
 
     if request.method == "POST":
 
@@ -105,6 +106,7 @@ def create_event_preview(request):
             date=event_data['date'],
             maxPeople=event_data['maxPeople'],
         )
+
         event.topics.set(topics)
         request.session.pop('event_data', None)
         messages.success(request, f"Event '{event.title}' created successfully!")
