@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="calendar-container">
+    <div id="calendar"></div>
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: {{ events|safe }},
+        eventClick: function (info) {
+            if (info.event.url) {
+                window.location.href = info.event.url; // Redirect to event details page
+            }
+        },
+        eventContent: function (info) {
+            return { html: info.event.title }; // Properly enclosed
+        },
+        height: '100vh',
+        contentHeight: 'auto'
+    });
+
+    calendar.render();
+});
+</script>
+
+
+
+{% endblock %}
