@@ -8,6 +8,13 @@
         <div class="event-details">
             <p class="detail-item"><strong>Host:</strong> {{ event_data.host }}</p>
             <p class="detail-item"><strong>Event Title:</strong> {{ event_data.title }}</p>
+
+            {% if picture_url %}
+            <div class="profile-picture">
+                <img src="{{ picture_url }}" alt="Event Picture">
+            </div>
+        {% endif %}
+
             <p class="detail-item"><strong>Event Description:</strong></p>
             <p class="detail-item-description">{{ event_data.description }}</p>
             <div class="details-row">

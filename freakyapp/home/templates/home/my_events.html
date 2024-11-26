@@ -9,6 +9,14 @@
     <div class="card">
 
         <div class="triangle"> </div>
+        <div class="card-image">
+            <img 
+                class="banner"
+                src="{{event.picture.url}}" 
+                alt="Event Image" 
+                class="card-img"
+            />
+        </div>
 
         <div class="card-header">
             <a href=" {% url 'event-details' event.id %}">

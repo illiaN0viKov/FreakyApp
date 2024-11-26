@@ -848,3 +848,8 @@ h4 {
   align-items: center;  /* Center content vertically */
   
 }
+.banner{
+  display: block;
+  width: 100%;
+  max-width: 800px;
+}

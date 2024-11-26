@@ -37,7 +37,9 @@ class Event(models.Model):
     maxPeople=models.IntegerField(verbose_name="Maximum People")
     topics = models.ManyToManyField(Topic, related_name='events', blank=False)
     participants = models.ManyToManyField(User, related_name="joined_event", blank=True) 
-
+    picture = models.ImageField(upload_to='event/pics/', blank=True, null=True, verbose_name="Event Picture", default='default.jpg')
+   
+   
     def __str__(self):
         return f"{self.title} - Event"
     

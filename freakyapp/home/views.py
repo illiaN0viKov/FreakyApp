@@ -57,11 +57,21 @@ def events(request):
 @login_required(login_url='login')
 def create_event(request):
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event_data = form.cleaned_data
-            event_data['date'] = event_data['date'].isoformat()  # Convert datetime to string
-            request.session['event_data'] = event_data
+            event_data['date'] = event_data['date'].isoformat() # Convert datetime to string
+            picture = request.FILES.get('picture')
+            if picture:
+                # Save the image to a media folder
+                file_path = f"event/pics/{picture.name}"  # You can modify this path if needed
+                with open(f"media/{file_path}", 'wb') as f:
+                    for chunk in picture.chunks():
+                        f.write(chunk)
+                event_data['picture'] = file_path  # Store the file path in session
+                
+            # Store event data in the session, excluding the picture object itself
+            request.session['event_data'] = event_data  
             return redirect('create-event-topic')
     else:
         form = EventForm()
@@ -97,6 +107,10 @@ def create_event_preview(request):
     topics = Topic.objects.filter(id__in=event_data.get('topics', []))
     event_data['host'] = request.user.username
 
+
+    picture_url = event_data.get('picture')
+    if picture_url:
+        picture_url = f"/media/{picture_url}"  
     if request.method == "POST":
 
         event = Event.objects.create(
@@ -105,6 +119,7 @@ def create_event_preview(request):
             description=event_data['description'],
             date=event_data['date'],
             maxPeople=event_data['maxPeople'],
+            picture=request.FILES.get('picture') 
         )
 
         event.topics.set(topics)
@@ -112,7 +127,7 @@ def create_event_preview(request):
         messages.success(request, f"Event '{event.title}' created successfully!")
         return redirect('event-created')
     
-    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics})
+    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics, "picture_url": picture_url})
 
 
 def event_created(request):

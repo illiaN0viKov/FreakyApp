@@ -5,13 +5,18 @@
 
 <div class="input-event">
     <h4>Host: {{ request.user.username }}</h4>
-    <form method="POST" action=".">
+    <form method="POST" action="." enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-group-title">
         {{ form.title.label_tag}} 
         {{ form.title }} 
         </div>
+
+        <div class="form-group-title">
+            {{ form.picture.label_tag}} 
+            {{ form.picture }} 
+            </div>
 
         <div class="form-group-description">
             {{ form.description.label_tag}} 

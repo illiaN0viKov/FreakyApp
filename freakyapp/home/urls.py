@@ -3,6 +3,9 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path("", views.home, name= "home"),
     path("events/", views.events, name="events"),
@@ -29,3 +32,4 @@ urlpatterns = [
     path("event-details/<str:pk>/", views.event_details, name="event-details"),
      path('join-event/<str:pk>/', views.join_event, name='join-event'),
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
