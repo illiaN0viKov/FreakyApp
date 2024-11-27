@@ -18,7 +18,7 @@ pip install -r requirements.txt
 echo "Dependencies installed successfully."
 
 
-git pull request origin main
+git pull origin main
 cd freakyapp
 python manage.py makemigrations
 python manage.py migrate
