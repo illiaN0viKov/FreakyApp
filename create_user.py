@@ -14,8 +14,8 @@ credentials = [
 ]
 
 #Change only first element of the list
-username = credentials[15][0]
-password = credentials[15][1]
+username = credentials[1][0]
+password = credentials[1][1]
 #############################################
 
 

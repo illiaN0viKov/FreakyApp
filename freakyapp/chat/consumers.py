@@ -10,25 +10,28 @@ class ChatRoomConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope["user"]
         self.chat_name = self.scope["url_route"]["kwargs"]["chat_name"]
-        self.chat = get_object_or_404(ChatGroup, chat_name=self.chat_name)
+        self.chat = ChatGroup.objects.get(chat_name=self.chat_name)
+        # Add the channel to the group
+        async_to_sync(self.channel_layer.group_add)(
+            self.chat_name, self.channel_name
+        )
 
-        async_to_sync(self.channel_layer.group_add)(self.chat_name, self.channel_name)
-
-        #check and add online
-        if self.user not in self.chat.users_online.all():
+        # Check if the user is already online, and add them if not
+        if not self.chat.users_online.filter(id=self.user.id).exists():
             self.chat.users_online.add(self.user)
-            self.count_online()
-
+            self.chat.save()  # Save changes to the database
+            self.count_online()  # Update online user count if required
 
         self.accept()
 
     def disconnect (self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(self.chat_name, self.channel_name)
+        if hasattr(self, 'chat') and self.chat:
+            async_to_sync(self.channel_layer.group_discard)(self.chat_name, self.channel_name)
 
-        #check and remove online
-        if self.user in self.chat.users_online.all():
-            self.chat.users_online.remove(self.user)
-            self.count_online()
+            #check and remove online
+            if self.user in self.chat.users_online.all():
+                self.chat.users_online.remove(self.user)
+                self.count_online()
 
     def receive(self, text_data):
         text_data_json=json.loads(text_data)

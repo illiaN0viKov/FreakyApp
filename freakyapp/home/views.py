@@ -12,7 +12,8 @@ from django.conf.urls.static import static
 from django.http import HttpResponse
 from datetime import datetime, date
 
-from .models import Event, Topic
+from .models import *
+from chat.models import *
 from datetime import datetime
 
 from datetime import date
@@ -331,6 +332,9 @@ def event_details(request, pk):
 def join_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     event.participants.add(request.user)
+    chat_group = event.chat
+    chat_group.users_online.add(request.user)
+    chat_group.save()
     return redirect('event-details', pk=pk)
 
 

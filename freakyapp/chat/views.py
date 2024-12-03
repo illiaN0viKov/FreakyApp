@@ -6,8 +6,8 @@ from .forms import *
 
 
 @login_required
-def chat_view(request):
-    chat_group = get_object_or_404(ChatGroup, chat_name = "TYPE-SHIT")
+def chat_view(request, chat_name):
+    chat_group = get_object_or_404(ChatGroup, chat_name = chat_name)
     chat_messages = chat_group.chat_messages.all()[:30]
     form = MessageForm()
     
@@ -21,8 +21,10 @@ def chat_view(request):
             context = {
                 "message": message,
                 "user": request.user,
-
             }
+
             return render(request, 'chat/partials/chat_message_p.html', context)
 
-    return render(request, 'chat/chat.html', {"chat_messages":chat_messages, "form": form})
+    return render(request, 'chat/chat.html', {"chat_messages":chat_messages, "form": form,  "chat_name":chat_group.chat_name})
+
+

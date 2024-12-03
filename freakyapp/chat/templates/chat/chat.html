@@ -7,7 +7,7 @@
     <div class="bg-white shadow-md rounded-lg w-2/4 h-[80vh] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 
         <div class="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center relative">
-            <p class="text-lg font-semibold">Group Name</p>
+            <p class="text-lg font-semibold">{{chat_name}}</p>
             
             <p id="online_count" class="text-sm absolute bottom-1 left-1/2 transform -translate-x-1/2 "> Online</p>
             
@@ -33,7 +33,7 @@
                 <form id="chat_message_form" 
                     class="flex"
                     hx-ext = 'ws'
-                    ws-connect = "/ws/chat/TYPE-SHIT"
+                    ws-connect = "/ws/chat/{{chat_name}}/"
                     ws-send
                     _="on htmx:wsAfterSend reset() me">
                       

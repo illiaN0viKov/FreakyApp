@@ -76,9 +76,3 @@ class Profile(models.Model):
     def __str__(self) :
           return f"{self.user.username} Profile"
 
-
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        # Create a Profile instance for the new User
-        Profile.objects.create(user=instance)
