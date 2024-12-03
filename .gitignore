@@ -45,5 +45,7 @@ Thumbs.db
 **/migrations/*
 !**/migrations/__init__.py
 
+create_user.py
+
 # Ignore SQLite database file
 db.sqlite3
