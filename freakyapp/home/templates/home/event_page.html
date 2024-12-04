@@ -45,6 +45,12 @@
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">{{ field_titles.title }}: {{ event.title }}</h2>
+                <img 
+                class="banner"
+                src="{{event.picture.url}}" 
+                alt="Event Image" 
+                class="card-img"
+            />
             </div>
             <div class="card-body">
                 <p><strong>{{ field_titles.host }}:</strong> {{ event.host }}</p>

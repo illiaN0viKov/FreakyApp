@@ -35,9 +35,12 @@ class Event(models.Model):
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
     maxPeople=models.IntegerField(verbose_name="Maximum People")
+    picture= models.ImageField(upload_to='event_pictures/',blank=True, null=True, default='default.jpg')
     topics = models.ManyToManyField(Topic, related_name='events', blank=False)
     participants = models.ManyToManyField(User, related_name="joined_event", blank=True) 
-
+    
+   
+   
     def __str__(self):
         return f"{self.title} - Event"
     
