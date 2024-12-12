@@ -119,16 +119,24 @@ def event_created(request):
 ##################################################################################
 
 
-@login_required(login_url='login')
-def profile(request):
-    profile = request.user.profile
-    user = request.user
+@login_required
+def profile(request, username=None):
+    if username:
+        # Fetch the profile of the user with the provided username
+        user = User.objects.get(username=username)
+    else:
+        # Fetch the profile of the currently logged-in user
+        user = request.user
+
+    profile = user.profile
     joined_events = user.joined_event.all()  # Using the related_name for joined events
     events = Event.objects.filter(host=user)
+
     return render(request, 'home/profile.html', {
         'joined_events': joined_events,
         'events': events,
-        'profile':profile
+        'profile': profile,
+        'user': user  # Pass the 'user' explicitly to the template
     })
 
 
@@ -140,10 +148,10 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            # Redirect to the profile page with the username
+            return redirect('profile')  # Pass the username here
     else:
         form = ProfileForm(instance=profile)
-
 
     return render(request, 'home/edit_profile.html', {'form': form})
 

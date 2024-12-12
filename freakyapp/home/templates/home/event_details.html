@@ -5,7 +5,7 @@
         <h1 class="page-title">Event Details</h1>
 
         <div class="event-details">
-            <p class="detail-item"><strong>Host:</strong> {{ event.host }}</p>
+            <p class="detail-item"><strong>Host:</strong> <a href="{% url 'profile-other' username=event.host.username %}">{{ event.host }}</a></p>
             <p class="detail-item"><strong>Event Title:</strong> {{ event.title }}</p>
 
             <img 

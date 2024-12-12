@@ -9,9 +9,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("", views.home, name= "home"),
     path("events/", views.events, name="events"),
-    path("profile/", views.profile, name="profile"),
+    path('profile/', views.profile, name='profile'),# This will be used for the current user's profile
     path('profile/edit/', views.edit_profile, name='edit-profile'),
-    path("myEvents/", views.myEvents, name="myEvents"),
+    path("profile/<str:username>/", views.profile, name="profile-other"),
+    path("myEvents/", views.myEvents, name="myEvents"), 
     path("login/", views.CustomLogInView.as_view(), name="login"),
     path("logout/", views.CustomLogOutView.as_view(), name="logout"),
     path("success-logout/", views.success_logout, name="success-logout"),
