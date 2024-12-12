@@ -12,6 +12,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['bio', 'profile_picture']
+        widgets = {
+            'bio': forms.Textarea(attrs={'maxlength': '150', 'placeholder': 'Write your bio (max 150 characters)...'}),
+        }
 
 
 

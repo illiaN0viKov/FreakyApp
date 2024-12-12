@@ -122,8 +122,14 @@ def event_created(request):
 @login_required(login_url='login')
 def profile(request):
     profile = request.user.profile
-    return render(request, 'home/profile.html', {'profile': profile})
-
+    user = request.user
+    joined_events = user.joined_event.all()  # Using the related_name for joined events
+    events = Event.objects.filter(host=user)
+    return render(request, 'home/profile.html', {
+        'joined_events': joined_events,
+        'events': events,
+        'profile':profile
+    })
 
 
 
@@ -307,6 +313,8 @@ def join_event(request, pk):
 def calendar_view(request):
     if request.user.is_authenticated:
         joined_events = Event.objects.filter(participants=request.user)
+        all_events = Event.objects.all()
+        created_events = Event.objects.filter(host=request.user)
         events = [
             {
                 "title": event.title,
@@ -318,4 +326,4 @@ def calendar_view(request):
     else:
         events = []  # empty list for anonymous users
 
-    return render(request, 'home/calendar.html', {'events': events})
+    return render(request, 'home/calendar.html', {'events': events,'created_events': created_events, 'all_events':all_events})

@@ -72,8 +72,9 @@ class Message(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True, null=True)
+    bio = models.TextField(max_length=150, blank=True, null=True)
     profile_picture = models.ImageField(null=True, upload_to='profile/pics/', default='default_user.jpg')
+    
 
 
     def __str__(self) :
