@@ -312,9 +312,12 @@ def join_event(request, pk):
 
 def calendar_view(request):
     if request.user.is_authenticated:
+        # Get events for the authenticated user
         joined_events = Event.objects.filter(participants=request.user)
+        created_events = Event.objects.filter(host=request.user)  # Created events for the user
         all_events = Event.objects.all()
-        created_events = Event.objects.filter(host=request.user)
+        
+        # Create events array for the calendar
         events = [
             {
                 "title": event.title,
@@ -324,6 +327,10 @@ def calendar_view(request):
             for event in joined_events
         ]
     else:
+        # Default values for unauthenticated users
         events = []  # empty list for anonymous users
+        created_events = []  # Set created_events to an empty list for unauthenticated users
+        all_events = Event.objects.all()  # Show all events for unauthenticated users
 
-    return render(request, 'home/calendar.html', {'events': events,'created_events': created_events, 'all_events':all_events})
+    # Pass all variables to the template
+    return render(request, 'home/calendar.html', {'events': events, 'created_events': created_events, 'all_events': all_events})
