@@ -35,9 +35,12 @@ class Event(models.Model):
     updated=models.DateTimeField(auto_now=True)
     created=models.DateTimeField(auto_now_add=True)
     maxPeople=models.IntegerField(verbose_name="Maximum People")
+    picture= models.ImageField(upload_to='event_pictures/',blank=True, null=True, default='default.jpg')
     topics = models.ManyToManyField(Topic, related_name='events', blank=False)
     participants = models.ManyToManyField(User, related_name="joined_event", blank=True) 
-
+    
+   
+   
     def __str__(self):
         return f"{self.title} - Event"
     
@@ -69,8 +72,9 @@ class Message(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True, null=True)
+    bio = models.TextField(max_length=150, blank=True, null=True)
     profile_picture = models.ImageField(null=True, upload_to='profile/pics/', default='default_user.jpg')
+    
 
 
     def __str__(self) :

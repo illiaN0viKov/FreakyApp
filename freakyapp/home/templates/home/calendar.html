@@ -3,40 +3,259 @@
 {% block content %}
 <div class="calendar-container">
     <div id="calendar"></div>
+    <div id="filtered-events">
+        <h3>Events on Selected Date:</h3>
+        <ul id="event-list">
+            <p>No events selected.</p>
+        </ul>
+    </div>
 </div>
 {% endblock %}
 
-
-
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: {{ events|safe }},
-        eventClick: function (info) {
-            if (info.event.url) {
-                window.location.href = info.event.url; // Redirect to event details page
+        var calendarEl = document.getElementById('calendar');
+        var events = {{ events|safe }};
+        var notifications = []; // Array to store notifications
+        
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: events,
+            eventClick: function (info) {
+                if (info.event.url) {
+                    window.location.href = info.event.url; // Redirect to event details page
+                }
+            },
+            eventContent: function (info) {
+                return { html: `<div class="event-circle">${info.event.title}</div>` };
+            },
+            height: '80vh', // Adjust height
+            contentHeight: 'auto',
+            dateClick: function (info) {
+                // Filter events on the selected date
+                filterEvents(info.dateStr);
             }
-        },
-        eventContent: function (info) {
-            return { html: info.event.title }; // Properly enclosed
-        },
-        height: '100vh',
-        contentHeight: 'auto'
-    });
+        });
 
-    calendar.render();
-});
+        calendar.render();
+
+        // Function to filter events by the selected date
+        function filterEvents(dateStr) {
+            var filteredEvents = events.filter(function (event) {
+                return event.start.startsWith(dateStr); // Match the date
+            });
+
+            var eventList = document.getElementById('event-list');
+            eventList.innerHTML = ''; // Clear existing list
+
+            if (filteredEvents.length > 0) {
+                filteredEvents.forEach(function (event) {
+                    var li = document.createElement('li');
+                    li.innerHTML = `<a href="${event.url || '#'}">${event.title}</a>`;
+                    eventList.appendChild(li);
+                });
+            } else {
+                eventList.innerHTML = '<p>No events on this date.</p>';
+            }
+        }
+
+        // Check for events happening today or tomorrow
+        function checkUpcomingEvents() {
+            var today = new Date();
+            var tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            
+            var todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+            var tomorrowStr = tomorrow.toISOString().split('T')[0]; // YYYY-MM-DD
+
+            var todayEvents = events.filter(function (event) {
+                return event.start.startsWith(todayStr); // Check if event starts today
+            });
+
+            var tomorrowEvents = events.filter(function (event) {
+                return event.start.startsWith(tomorrowStr); // Check if event starts tomorrow
+            });
+
+            // Display notifications for today or tomorrow events
+            if (todayEvents.length > 0) {
+                showNotification("Events happening today!");
+            }
+
+            if (tomorrowEvents.length > 0) {
+                showNotification("Events happening tomorrow!");
+            }
+        }
+
+        // Show notification function
+        function showNotification(message) {
+            var notification = document.createElement('div');
+            notification.classList.add('notification');
+            notification.innerHTML = message;
+            document.body.appendChild(notification);
+
+            setTimeout(function() {
+                notification.style.opacity = 0;
+                setTimeout(function() {
+                    notification.remove();
+                }, 300);
+            }, 5000);
+        }
+        // Update notification icon with count
+        function updateNotificationIcon() {
+            var notificationCount = notifications.length;
+            var icon = document.getElementById('notification-icon');
+            var count = document.getElementById('notification-count');
+            if (notificationCount > 0) {
+                count.textContent = notificationCount;
+                icon.style.display = 'block'; // Show the icon if there are notifications
+            }
+        }
+
+        // Toggle the notifications window
+        function toggleNotificationsWindow() {
+            var window = document.getElementById('notifications-window');
+            if (window.style.display === 'none') {
+                window.style.display = 'block';
+                displayNotifications();
+            } else {
+                window.style.display = 'none';
+            }
+        }
+
+        // Display all notifications in the window
+        function displayNotifications() {
+            var windowContent = document.getElementById('notifications-content');
+            windowContent.innerHTML = ''; // Clear current content
+
+            notifications.forEach(function(notification) {
+                var p = document.createElement('p');
+                p.textContent = notification;
+                windowContent.appendChild(p);
+            });
+        }
+
+        // Run the check when the page loads
+        checkUpcomingEvents();
+
+        // Add event listener for notification icon click
+        document.getElementById('notification-icon').addEventListener('click', toggleNotificationsWindow);
+
+
+
+
+        // Run the check when the page loads
+        checkUpcomingEvents();
+
+        // Add event listener for notification icon click
+        document.getElementById('notification-icon').addEventListener('click', toggleNotificationsWindow);
+    });
 </script>
+
+<style>
+    /* Reduce the size of the calendar container */
+    .calendar-container {
+        max-width: 800px; /* Limit width of calendar */
+        margin: 0 auto; /* Center the calendar */
+    }
+
+    /* Custom styles for calendar events as circles */
+    .event-circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 60px; /* Set circle size */
+        height: 30px; /* Set circle size */
+        background-color: #007bff; /* Circle background color */
+        color: white; /* Text color */
+        border-radius: 20%; /* Make it a circle */
+        font-size: 0.8rem; /* Adjust font size */
+        overflow: hidden; /* Prevent text overflow */
+        text-align: center;
+    }
+
+    /* Change yellow highlight (for selected day) to blue */
+    .fc-daygrid-day.fc-day-today {
+        background-color: #007bff !important; /* Set background color to blue */
+        color: white !important; /* Set text color to white */
+    }
+
+    /* Filtered events list styling */
+    #filtered-events {
+        margin-top: 20px;
+    }
+    #event-list li {
+        list-style-type: none;
+        margin: 5px 0;
+    }
+    #event-list li a {
+        text-decoration: none;
+        color: #007bff;
+    }
+    #event-list li a:hover {
+        text-decoration: underline;
+    }
+
+    /* Notification styles */
+    .notification {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        padding: 15px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+        font-size: 16px;
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+    }
+
+    /* Notification icon in the top right corner */
+    #notification-icon {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        font-size: 24px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        padding: 10px;
+        cursor: pointer;
+        /* Hidden by default */
+    }
+
+    /* Notification count styling */
+    #notification-count {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* Notification window (hidden by default) */
+    #notifications-window {
+        position: fixed;
+        top: 150px;
+        right: 20px;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        width: 250px;
+        height: 300px;
+        display: none;
+        overflow-y: auto;
+        border-radius: 8px;
+    }
+
+
+</style>
+
+
 
 
 

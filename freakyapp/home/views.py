@@ -57,37 +57,30 @@ def events(request):
 #creating event page
 @login_required(login_url='login')
 def create_event(request):
-    if request.method == "POST":
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event_data = form.cleaned_data
-            event_data['date'] = event_data['date'].isoformat()  # Convert datetime to string
-            request.session['event_data'] = event_data
-            return redirect('create-event-topic')
+    if request.method == 'POST':
+        eventForm=EventForm(request.POST, request.FILES)
+        topicForm=TopicForm(request.POST)
+        
+        if eventForm.is_valid() and topicForm.is_valid():
+           
+            event = eventForm.save(commit=False)  # Create the Event instance without saving to the database
+            event.host = request.user  # Add the host manually
+            event.save() 
+            # Save the selected topics
+            topics = topicForm.cleaned_data['topics']
+            event.topics.set(topics)
+
+            messages.success(request, f"Event '{event.title}' created successfully!")
+            return redirect('event-created')  # Redirect to a relevant page
     else:
-        form = EventForm()
-    return render(request, 'home/create_event.html', {'form': form})
+        eventForm = EventForm()
+        topicForm = TopicForm()
 
-@login_required(login_url='login')
-def create_event_topic(request):
-    if 'event_data' not in request.session:
-        return redirect('create-event') 
+    context={'eventForm': eventForm,
+             'topicForm':topicForm}
+    return render(request, 'home/create_event.html', context)
 
-    event_data = request.session.get('event_data')
-    # event_data['date'] = datetime.fromisoformat(event_data['date'])
-
-    if request.method == "POST":
-        form = TopicForm(request.POST)
-        if form.is_valid():
-            event_data['topics'] = list(form.cleaned_data['topics'].values_list('id', flat=True))
-            request.session['event_data'] = event_data 
-            return redirect('create-event-preview')  # Redirect to preview page
-    else:
-        form = TopicForm()
-
-    return render(request, 'home/create_event_topic.html', {'form': form, 'event_data': event_data})
-
-
+'''
 @login_required(login_url='login')
 def create_event_preview(request):
     event_data = request.session.get('event_data')
@@ -106,6 +99,7 @@ def create_event_preview(request):
             description=event_data['description'],
             date=event_data['date'],
             maxPeople=event_data['maxPeople'],
+            picture=request.FILES.get('picture') 
         )
 
         event.topics.set(topics)
@@ -113,9 +107,9 @@ def create_event_preview(request):
         messages.success(request, f"Event '{event.title}' created successfully!")
         return redirect('event-created')
     
-    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics})
+    return render(request, "home/create_event_preview.html", {"event_data":event_data, "topics":topics, })
 
-
+'''
 def event_created(request):
     if not messages.get_messages(request):
         return redirect('home')
@@ -125,11 +119,25 @@ def event_created(request):
 ##################################################################################
 
 
-@login_required(login_url='login')
-def profile(request):
-    profile = request.user.profile
-    return render(request, 'home/profile.html', {'profile': profile})
+@login_required
+def profile(request, username=None):
+    if username:
+        # Fetch the profile of the user with the provided username
+        user = User.objects.get(username=username)
+    else:
+        # Fetch the profile of the currently logged-in user
+        user = request.user
 
+    profile = user.profile
+    joined_events = user.joined_event.all()  # Using the related_name for joined events
+    events = Event.objects.filter(host=user)
+
+    return render(request, 'home/profile.html', {
+        'joined_events': joined_events,
+        'events': events,
+        'profile': profile,
+        'user': user  # Pass the 'user' explicitly to the template
+    })
 
 
 
@@ -140,10 +148,10 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('profile')
+            # Redirect to the profile page with the username
+            return redirect('profile')  # Pass the username here
     else:
         form = ProfileForm(instance=profile)
-
 
     return render(request, 'home/edit_profile.html', {'form': form})
 
@@ -196,6 +204,7 @@ def myEvents(request):
     field_titles = {
         'host': Event._meta.get_field('host').verbose_name,
         'title': Event._meta.get_field('title').verbose_name,
+        'picture': Event._meta.get_field('picture').verbose_name,
         'description': Event._meta.get_field('description').verbose_name,
         'date': Event._meta.get_field('date').verbose_name,
         'maxPeople': Event._meta.get_field('maxPeople').verbose_name,
@@ -213,6 +222,7 @@ def myEvents(request):
 
 
 
+@login_required(login_url='login')
 def editEvent(request, pk):
     try:
         event = Event.objects.get(id=pk)
@@ -222,56 +232,30 @@ def editEvent(request, pk):
     if request.user != event.host:
         return HttpResponse('You are not allowed here!')
 
-    form = EventForm(instance=event)
+    if request.method == 'POST':
+        eventForm = EventForm(request.POST, request.FILES, instance=event)
+        topicForm = TopicForm(request.POST)
 
-    if request.method == "POST":
-        form = EventForm(request.POST, instance=event)
-        if form.is_valid():
-            event.title = form.cleaned_data['title']
-            event.description = form.cleaned_data['description']
-            event.date = form.cleaned_data['date']
-            event.maxPeople = form.cleaned_data['maxPeople']
+        if eventForm.is_valid() and topicForm.is_valid():
+            event = eventForm.save(commit=False)  # Save Event data
+            event.host = request.user  # Ensure the host is the current user (just in case)
             event.save()
 
-            # Add topics to session data
-            event_data = {
-                'id': event.id,
-                'title': event.title,
-                'description': event.description,
-                'date': event.date.isoformat(),
-                'maxPeople': event.maxPeople,
-                'topics': list(event.topics.values_list('id', flat=True))  # Store current topics
-            }
-            request.session['saved_event_data'] = event_data
+            # Save the selected topics
+            topics = topicForm.cleaned_data['topics']
+            event.topics.set(topics)
 
-            return redirect('edit-event-topics')
+            messages.success(request, f"Event '{event.title}' updated successfully!")
+            return redirect('event-details', pk=event.pk)  # Redirect to the event detail page (or another relevant page)
+    else:
+        eventForm = EventForm(instance=event)
+        topicForm = TopicForm(initial={'topics': event.topics.all()})  # Prepopulate the form with selected topics
 
-    context = {'form': form, 'event': event}
+    context = {'eventForm': eventForm, 'topicForm': topicForm, 'event': event}
     return render(request, 'home/edit_event.html', context)
 
-def editTopics(request):
-    if 'saved_event_data' not in request.session:
-        return redirect('edit-event')
 
-    event_data = request.session.get('saved_event_data')
-
-    # Fetch topics previously selected
-    selected_topic_ids = event_data.get('topics', [])
-    selected_topics = Topic.objects.filter(id__in=selected_topic_ids)
-
-    if request.method == "POST":
-        form = TopicForm(request.POST)
-        if form.is_valid():
-            # Get selected topics
-            selected_topics = form.cleaned_data['topics']
-            event_data['topics'] = list(selected_topics.values_list('id', flat=True))
-            request.session['saved_event_data'] = event_data
-            return redirect('edit-event-preview')
-    else:
-        form = TopicForm(initial={'topics': selected_topic_ids})  # Initialize with topic IDs
-
-    return render(request, 'home/edit_event_topic.html', {'form': form, 'event_data': event_data})
-
+'''
 def editPreview(request):
     event_data = request.session.get('saved_event_data')
     if not event_data:
@@ -299,11 +283,7 @@ def editPreview(request):
         return redirect('edited-event')
 
     return render(request, 'home/edit_event_preview.html', {'event_data': event_data, 'topics': topics})
-
-def editedEvent(request):
-    if not messages.get_messages(request):
-        return redirect('home')
-    return render(request, 'home/edit_success_page.html')
+'''
 
 
 def deleteEvent(request, pk):
@@ -340,7 +320,12 @@ def join_event(request, pk):
 
 def calendar_view(request):
     if request.user.is_authenticated:
+        # Get events for the authenticated user
         joined_events = Event.objects.filter(participants=request.user)
+        created_events = Event.objects.filter(host=request.user)  # Created events for the user
+        all_events = Event.objects.all()
+        
+        # Create events array for the calendar
         events = [
             {
                 "title": event.title,
@@ -350,6 +335,10 @@ def calendar_view(request):
             for event in joined_events
         ]
     else:
+        # Default values for unauthenticated users
         events = []  # empty list for anonymous users
+        created_events = []  # Set created_events to an empty list for unauthenticated users
+        all_events = Event.objects.all()  # Show all events for unauthenticated users
 
-    return render(request, 'home/calendar.html', {'events': events})
+    # Pass all variables to the template
+    return render(request, 'home/calendar.html', {'events': events, 'created_events': created_events, 'all_events': all_events})

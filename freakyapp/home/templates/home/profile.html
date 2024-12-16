@@ -1,44 +1,67 @@
-{% extends "main.html" %}
-
-{% load static %}
+{% extends 'main.html' %}
 
 {% block content %}
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}"> <!-- Use Django's static tag -->
-</head>
-
-<body>
-    <div class="profile-container">
-        <!-- Profile Information -->
-        <div class="profile-info">
-            <div class="profile-picture">
-                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
-            </div>
-            <div class="username">{{ user.username }}</div>
-            <p>{{ profile.bio }}</p>
-            {% if request.user == user %}
-            <a href="{% url 'edit-profile'%}" class="crazy-button">Edit</a>
+<div style="width: 1000px;height: 700px; background: white; border: 1px solid #ccc; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; margin: 0 auto; margin-top: 50px;">
+    <!-- Profile Information -->
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <div style="flex: 1; text-align: center;">
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="width: 200px; height: 200px; border-radius: 50%;margin-left: 380px;">
+            <h2 style="margin: 20px 0;font-size: 1.6rem;font-weight: bold;padding-bottom: 20px;">{{ user.username }}</h2>
+            <p style="line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word;margin: 20px;">{{ profile.bio }}</p>
             
+            <!-- Display buttons for the current logged-in user -->
+            {% if request.user == user %}
+            <a href="{% url 'edit-profile' %}" style="display: inline-block; margin: 10px 5px;font-weight: bold; padding: 10px 20px; border: none; border-radius: 4px; background-color: #007bff; color: white; text-decoration: none; text-align: center; transition: background-color 0.3s; width: 120px;" onmouseover="this.style.backgroundColor='#28a745';" onmouseout="this.style.backgroundColor='#007bff';">Edit</a>
+            <a href="{% url 'myEvents' %}" style="display: inline-block;font-weight: bold; margin: 10px 5px; padding: 10px 20px; border: none; border-radius: 4px; background-color: #007bff; color: white; text-decoration: none; text-align: center; transition: background-color 0.3s; width: 120px;" onmouseover="this.style.backgroundColor='#28a745';" onmouseout="this.style.backgroundColor='#007bff';">My Events</a>
+            <form method="post" action="{% url 'logout' %}" style="margin: 10px 5px; display: inline-block;">
+                {% csrf_token %}
+                <button type="submit" style="padding: 10px 20px;font-weight: bold; border: none; border-radius: 4px; background-color: #007bff; color: white; cursor: pointer; transition: background-color 0.3s; width: 120px;" onmouseover="this.style.backgroundColor='#dc3545';" onmouseout="this.style.backgroundColor='#007bff';">Logout</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Events Section -->
+    <div style="display: flex; gap: 20px;">
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 10px;font-size: 1.6rem">Events Created</h3>
+            {% if events %}
+            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 4px;">
+                {% for event in events %}
+                <div style="margin-bottom: 10px;">
+                    <a href="{% url 'event-details' event.id %}" style="text-decoration: none; color: black;">
+                        <strong>{{ event.title }}</strong><br>
+                        <span style="font-size: 14px;"><strong>Date:</strong> {{ event.date }}</span>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; text-align: center;">
+                <span style="color: #999;">You haven't created any events yet.</span>
+            </div>
             {% endif %}
         </div>
 
-        
-
-
-        <!-- Logout Section -->
-        <div>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="crazy-button">Logout</button>
-            </form>
-            <a href="{% url 'myEvents'%}" class="crazy-button">My Events</a>
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 10px;font-size: 1.6rem">Events Joined</h3>
+            {% if joined_events %}
+            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; max-height: 150px; overflow-y: auto;">
+                {% for event in joined_events %}
+                <div style="margin-bottom: 10px;">
+                    <a href="{% url 'event-details' event.id %}" style="text-decoration: none; color: black;">
+                        <strong>{{ event.title }}</strong><br>
+                        <span style="font-size: 14px;"><strong>Date:</strong> {{ event.date }}</span>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; text-align: center;">
+                <span style="color: #999;">You haven't joined any events yet.</span>
+            </div>
+            {% endif %}
         </div>
-       
     </div>
-</body>
-
-{% endblock content %}
+</div>
+{% endblock %}
